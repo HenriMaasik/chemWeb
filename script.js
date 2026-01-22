@@ -59,7 +59,7 @@ panels.forEach(panel => {
 let totalScroll = 0;
 const scrollAmounts = [];
 panelData.forEach((d, index) => {
-  const sectionScroll = index === 0 ? BASE_SCROLL : BASE_SCROLL * SECTIONS_SCROLL_MULTIPLIER;
+  const sectionScroll = index === 0 ? BASE_SCROLL : (index === panels.length - 1 ? BASE_SCROLL : BASE_SCROLL * SECTIONS_SCROLL_MULTIPLIER);
   scrollAmounts.push(sectionScroll);
   totalScroll += sectionScroll + d.hold;
 });
@@ -182,7 +182,7 @@ function scrollToSection(index) {
   const scrollOffset = window.innerWidth < 600 ? vh * 0.45 : vh * 0.5;
   
   window.scrollTo({
-    top: offset + scrollOffset * 8,
+    top: offset + scrollOffset * 5.5,
     behavior: "smooth"
   });
 }
@@ -234,7 +234,7 @@ function updatePanels() {
 
     let opacity = 0;
     let scale = 1;
-    let y = 60 - progress * 120;
+    let y = 60 - progress * 155;
 
     if (index === 0) {
       // LANDING
@@ -247,22 +247,22 @@ function updatePanels() {
       if (progress < 0.35) {
         const eased = progress / 0.35;
         opacity = eased;
-        scale = 0.6 + eased * 0.75;
+        scale = 0.6 + eased * 0.65;
       } else {
         opacity = 1;
-        scale = 1.35;
+        scale = 1.25;
       }
 
       // CONTENT-AWARE FADE OUT
       const fadeDelay = hold / maxScroll;
-      const fadeStart = 0.8 + fadeDelay * 0.4;
+      const fadeStart = 0.9 + fadeDelay * 0.4;
 
       if (progress > fadeStart) {
         const p = (progress - fadeStart) / (1 - fadeStart);
         const eased = Math.max(0, 1 - p);
 
         opacity = eased;
-        scale = 0.6 + eased * 0.75;
+        scale = 0.6 + eased * 0.65;
       }
     }
 

@@ -171,10 +171,11 @@ body {
   color: rgba(255, 255, 255, 0.7);
   max-width: 600px;
   line-height: 1.6;
+  margin-bottom: 20px;
 }
 
 .scroll-btn {
-  margin-top: 50px;
+  margin-top: 0px;
   padding: 16px 36px;
   border-radius: 50px;
   border: none;
@@ -614,6 +615,128 @@ body {
   background: linear-gradient(90deg, rgb(100, 200, 255), rgb(100, 150, 255));
   transition: width 0.1s ease;
 }
+
+@media (max-width: 1624px) {
+  .panel {
+    top: 35%;
+    width: 92%;
+    max-width: 1000px;
+  }
+
+  .landing h1 {
+    font-size: 2.5rem;
+  }
+
+  .landing p {
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin-bottom: 30px;
+  }
+
+  .panel h2 {
+    font-size: 2.3rem;
+    margin-bottom: 40px;
+  }
+
+  .columns {
+    gap: 30px;
+  }
+
+  .box {
+    max-width: 400px;
+    padding: 25px;
+  }
+
+  .box h3 {
+    font-size: 1,1rem;
+    margin-bottom: 16px;
+  }
+
+  .box p {
+    font-size: 0.75rem;
+    line-height: 1.6;
+  }
+
+  .keyword-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .keyword-tag {
+    padding: 10px 12px;
+    font-size: 0.75rem;
+  }
+
+  .scroll-btn {
+    padding: 15px 24px;
+    font-size: 0.7rem;
+  }
+
+  .process-steps {
+    gap: 12px;
+  }
+
+  .step {
+    padding: 12px 16px;
+  }
+
+  .step-number {
+    width: 25px;
+    height: 25px;
+    font-size: 0.9rem;
+  }
+
+  .step-text {
+    font-size: 0.75rem;
+  }
+
+  .image-container {
+    height: 110px;
+    margin: 16px 0;
+  }
+
+  .image-caption {
+    font-size: 0.75rem;
+  }
+
+  .search-container {
+    max-width: 320px;
+  }
+
+  .search-input {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 10px 38px 10px 16px;
+  }
+
+  .search-icon {
+    right: 14px;
+    font-size: 1rem;
+  }
+
+  .search-results {
+    max-height: 280px;
+  }
+
+  .styled-list li {
+    font-size: 0.75rem;
+  }
+
+  .comparison-row {
+    font-size: 1rem;
+  }
+
+  .highlight-text {
+    padding: 16px 18px;
+  }
+}
+
+
+
+
+
+
+
 
 /* Responsive */
 @media (max-width: 1024px) {
