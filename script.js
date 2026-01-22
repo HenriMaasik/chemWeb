@@ -1,10 +1,27 @@
 const panels = document.querySelectorAll(".panel");
 const scrollBtns = document.querySelectorAll(".scroll-btn");
 const scrollIndicator = document.getElementById("scrollIndicator");
+const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+const backToTop = document.getElementById("backToTop");
+const progressBar = document.getElementById("progressBar");
 
 let vh = window.innerHeight;
 const BASE_SCROLL = vh * 4;
 const SECTIONS_SCROLL_MULTIPLIER = 2; // Extra scroll time for non-landing sections
+
+// Search content data
+const searchContent = [
+  { title: "Kuidas aitab keemia kaitsta keskkonda?", section: "Landing", keywords: ["keemia", "keskkond", "chemistry", "environment"] },
+  { title: "Miks on keemia keskkonna kaitsel oluline?", section: "Section 1", keywords: ["keskkonnaprobleemid", "pollution", "climate change", "waste", "depletion"] },
+  { title: "Keskkonnaprobleemid", section: "Section 1", keywords: ["industrial emissions", "greenhouse gases", "landfills", "oceans", "natural materials"] },
+  { title: "Chemistry's Role", section: "Section 1", keywords: ["detecting", "pollutants", "transforming", "eco-friendly", "sustainable"] },
+  { title: "Green Chemistry", section: "Section 2", keywords: ["green chemistry", "sustainable", "principles"] },
+  { title: "12 Principles of Green Chemistry", section: "Section 2", keywords: ["prevention", "atom economy", "hazardous", "solvents", "energy", "renewable"] },
+  { title: "Water Purification", section: "Section 3", keywords: ["water", "purification", "filtration", "chlorination"] },
+  { title: "Air Pollution Control", section: "Section 4", keywords: ["air", "pollution", "catalytic converters", "emissions"] },
+  { title: "Catalytic Converters", section: "Section 4", keywords: ["catalysts", "CO", "NOx", "exhaust"] },
+];
 
 // Responsive positioning: sections centered based on viewport height
 function getSectionTop() {
@@ -62,21 +79,137 @@ function updateScrollIndicator() {
   }
 }
 
+// --- Back to Top Button ---
+function updateBackToTop() {
+  if (!backToTop) return;
+  
+  const scrollY = window.scrollY;
+  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+  
+  if (scrollY > vh * 0.5) {
+    backToTop.classList.add("visible");
+  } else {
+    backToTop.classList.remove("visible");
+  }
+}
+
+if (backToTop) {
+  backToTop.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
+}
+
+// --- Progress Tracker ---
+function updateProgressBar() {
+  if (!progressBar) return;
+  
+  const scrollY = window.scrollY;
+  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollY / scrollHeight) * 100;
+  
+  progressBar.style.width = `${Math.min(progress, 100)}%`;
+}
+
+// --- Search Functionality ---
+function performSearch(query) {
+  if (!query || query.length < 2) {
+    if (searchResults) {
+      searchResults.classList.remove("active");
+    }
+    return;
+  }
+  
+  const lowerQuery = query.toLowerCase();
+  const results = searchContent.filter(item => {
+    return item.title.toLowerCase().includes(lowerQuery) ||
+           item.keywords.some(keyword => keyword.toLowerCase().includes(lowerQuery)) ||
+           item.section.toLowerCase().includes(lowerQuery);
+  });
+  
+  displaySearchResults(results);
+}
+
+function displaySearchResults(results) {
+  if (!searchResults) return;
+  
+  if (results.length === 0) {
+    searchResults.innerHTML = '<div class="search-result-item"><span class="result-title">No results found</span></div>';
+  } else {
+    searchResults.innerHTML = results.map(item => `
+      <div class="search-result-item" data-section="${item.section}">
+        <span class="result-title">${item.title}</span>
+        <span class="result-section">${item.section}</span>
+      </div>
+    `).join("");
+    
+    // Add click handlers
+    searchResults.querySelectorAll(".search-result-item").forEach(item => {
+      item.addEventListener("click", () => {
+        const sectionName = item.dataset.section;
+        const sectionIndex = getSectionIndex(sectionName);
+        if (sectionIndex >= 0) {
+          scrollToSection(sectionIndex);
+          if (searchInput) searchInput.value = "";
+          searchResults.classList.remove("active");
+        }
+      });
+    });
+  }
+  
+  searchResults.classList.add("active");
+}
+
+function getSectionIndex(sectionName) {
+  const mapping = {
+    "Landing": 0,
+    "Section 1": 1,
+    "Section 2": 2,
+    "Section 3": 3,
+    "Section 4": 4
+  };
+  return mapping[sectionName] ?? 0;
+}
+
+function scrollToSection(index) {
+  let offset = 0;
+  for (let i = 0; i <= index; i++) {
+    offset += scrollAmounts[i] + panelData[i].hold;
+  }
+  
+  const scrollOffset = window.innerWidth < 600 ? vh * 0.45 : vh * 0.5;
+  
+  window.scrollTo({
+    top: offset + scrollOffset,
+    behavior: "smooth"
+  });
+}
+
+if (searchInput) {
+  searchInput.addEventListener("input", (e) => {
+    performSearch(e.target.value);
+  });
+  
+  searchInput.addEventListener("focus", () => {
+    if (searchInput.value.length >= 2) {
+      performSearch(searchInput.value);
+    }
+  });
+}
+
+// Close search results when clicking outside
+document.addEventListener("click", (e) => {
+  if (searchInput && !searchInput.contains(e.target) && searchResults && !searchResults.contains(e.target)) {
+    searchResults.classList.remove("active");
+  }
+});
+
 // --- Scroll buttons ---
 scrollBtns.forEach((btn, index) => {
   btn.addEventListener("click", () => {
-    let offset = 0;
-    for (let i = 0; i <= index; i++) {
-      offset += scrollAmounts[i] + panelData[i].hold;
-    }
-
-    const sectionTop = getSectionTop();
-    const scrollOffset = window.innerWidth < 600 ? vh * 0.45 : vh * 0.5;
-    
-    window.scrollTo({
-      top: offset + scrollOffset * 8,
-      behavior: "smooth"
-    });
+    scrollToSection(index);
   });
 });
 
@@ -141,6 +274,34 @@ function updatePanels() {
   });
 }
 
+// --- Progress Saving (localStorage) ---
+function saveProgress() {
+  const scrollY = window.scrollY;
+  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = scrollY / scrollHeight;
+  
+  localStorage.setItem("chemWebProgress", progress);
+}
+
+function loadProgress() {
+  const savedProgress = localStorage.getItem("chemWebProgress");
+  if (savedProgress) {
+    const progress = parseFloat(savedProgress);
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollY = progress * scrollHeight;
+    
+    // Only restore if it makes sense (not at the very beginning)
+    if (progress > 0.05) {
+      setTimeout(() => {
+        window.scrollTo({
+          top: scrollY,
+          behavior: "auto"
+        });
+      }, 100);
+    }
+  }
+}
+
 // Handle resize
 window.addEventListener("resize", () => {
   vh = window.innerHeight;
@@ -151,9 +312,14 @@ window.addEventListener("resize", () => {
 window.addEventListener("scroll", () => {
   updatePanels();
   updateScrollIndicator();
+  updateBackToTop();
+  updateProgressBar();
+  saveProgress();
 });
 
 // Initialize
 updatePanels();
 updateScrollIndicator();
+updateBackToTop();
+loadProgress();
 
