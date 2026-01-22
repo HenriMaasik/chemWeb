@@ -149,7 +149,7 @@ function displaySearchResults(results) {
     searchResults.querySelectorAll(".search-result-item").forEach(item => {
       item.addEventListener("click", () => {
         const sectionName = item.dataset.section;
-        const sectionIndex = getSectionIndex(sectionName);
+        const sectionIndex = getSectionIndex(sectionName) - 1;
         if (sectionIndex >= 0) {
           scrollToSection(sectionIndex);
           if (searchInput) searchInput.value = "";
@@ -182,7 +182,7 @@ function scrollToSection(index) {
   const scrollOffset = window.innerWidth < 600 ? vh * 0.45 : vh * 0.5;
   
   window.scrollTo({
-    top: offset + scrollOffset,
+    top: offset + scrollOffset * 8,
     behavior: "smooth"
   });
 }
