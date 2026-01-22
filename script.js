@@ -1,9 +1,24 @@
 const panels = document.querySelectorAll(".panel");
 const scrollBtns = document.querySelectorAll(".scroll-btn");
+const scrollIndicator = document.getElementById("scrollIndicator");
 
-const vh = window.innerHeight;
+let vh = window.innerHeight;
 const BASE_SCROLL = vh * 4;
 const SECTIONS_SCROLL_MULTIPLIER = 2; // Extra scroll time for non-landing sections
+
+// Responsive positioning: sections centered based on viewport height
+function getSectionTop() {
+  const isMobile = window.innerWidth < 600;
+  const isTablet = window.innerWidth < 900;
+  
+  if (isMobile) {
+    return 35; // Mobile: 35% from top
+  } else if (isTablet) {
+    return 38; // Tablet: 38% from top
+  } else {
+    return 32; // Desktop: 32% from top
+  }
+}
 
 // --- Measure panels ---
 const panelData = [];
@@ -16,7 +31,7 @@ panels.forEach(panel => {
   const height = panel.offsetHeight;
 
   // Extra readable distance for tall panels
-  const hold = Math.max(0, height - vh * 0.8);
+  const hold = Math.max(0, height - vh * 0.7);
 
   panelData.push({ hold });
 
@@ -33,6 +48,20 @@ panelData.forEach((d, index) => {
 });
 document.body.style.height = `${totalScroll}px`;
 
+// --- Scroll indicator ---
+function updateScrollIndicator() {
+  if (!scrollIndicator) return;
+  
+  const scrollY = window.scrollY;
+  const threshold = vh * 0.5;
+  
+  if (scrollY < threshold && window.innerWidth >= 600) {
+    scrollIndicator.classList.add("visible");
+  } else {
+    scrollIndicator.classList.remove("visible");
+  }
+}
+
 // --- Scroll buttons ---
 scrollBtns.forEach((btn, index) => {
   btn.addEventListener("click", () => {
@@ -41,8 +70,11 @@ scrollBtns.forEach((btn, index) => {
       offset += scrollAmounts[i] + panelData[i].hold;
     }
 
+    const sectionTop = getSectionTop();
+    const scrollOffset = window.innerWidth < 600 ? vh * 0.45 : vh * 0.5;
+    
     window.scrollTo({
-      top: offset + vh * 4,
+      top: offset + scrollOffset * 8,
       behavior: "smooth"
     });
   });
@@ -51,6 +83,7 @@ scrollBtns.forEach((btn, index) => {
 // --- Animation ---
 function updatePanels() {
   const scrollY = window.scrollY;
+  const sectionTop = getSectionTop();
   let accumulated = 0;
 
   panels.forEach((panel, index) => {
@@ -68,10 +101,10 @@ function updatePanels() {
 
     let opacity = 0;
     let scale = 1;
-    let y = 60 - progress * 120; // ← movement stays unchanged
+    let y = 60 - progress * 120;
 
     if (index === 0) {
-      // LANDING (unchanged)
+      // LANDING
       const eased = 1 - Math.cos(progress * Math.PI / 2);
       opacity = 1 - eased;
       scale = 1.25 - eased * 0.25;
@@ -81,13 +114,13 @@ function updatePanels() {
       if (progress < 0.35) {
         const eased = progress / 0.35;
         opacity = eased;
-        scale = 0.6 + eased * 0.75; // Start at 0.6, end at 1.35
+        scale = 0.6 + eased * 0.75;
       } else {
         opacity = 1;
         scale = 1.35;
       }
 
-      // --- CONTENT-AWARE FADE OUT ---
+      // CONTENT-AWARE FADE OUT
       const fadeDelay = hold / maxScroll;
       const fadeStart = 0.8 + fadeDelay * 0.4;
 
@@ -96,17 +129,31 @@ function updatePanels() {
         const eased = Math.max(0, 1 - p);
 
         opacity = eased;
-        scale = 0.6 + eased * 0.75; // Match entry scale range
+        scale = 0.6 + eased * 0.75;
       }
     }
 
     panel.style.opacity = opacity;
     panel.style.transform = `translate(-50%, ${y}vh) scale(${scale})`;
+    panel.style.top = `${sectionTop}%`;
 
     accumulated = end;
   });
 }
 
-window.addEventListener("scroll", updatePanels);
+// Handle resize
+window.addEventListener("resize", () => {
+  vh = window.innerHeight;
+  updatePanels();
+});
+
+// Scroll events
+window.addEventListener("scroll", () => {
+  updatePanels();
+  updateScrollIndicator();
+});
+
+// Initialize
 updatePanels();
+updateScrollIndicator();
 
