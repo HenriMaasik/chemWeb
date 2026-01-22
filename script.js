@@ -3,6 +3,7 @@ const scrollBtns = document.querySelectorAll(".scroll-btn");
 
 const vh = window.innerHeight;
 const BASE_SCROLL = vh * 4;
+const SECTIONS_SCROLL_MULTIPLIER = 2; // Extra scroll time for non-landing sections
 
 // --- Measure panels ---
 const panelData = [];
@@ -24,7 +25,12 @@ panels.forEach(panel => {
 
 // --- Total scroll height ---
 let totalScroll = 0;
-panelData.forEach(d => totalScroll += BASE_SCROLL + d.hold);
+const scrollAmounts = [];
+panelData.forEach((d, index) => {
+  const sectionScroll = index === 0 ? BASE_SCROLL : BASE_SCROLL * SECTIONS_SCROLL_MULTIPLIER;
+  scrollAmounts.push(sectionScroll);
+  totalScroll += sectionScroll + d.hold;
+});
 document.body.style.height = `${totalScroll}px`;
 
 // --- Scroll buttons ---
@@ -32,11 +38,11 @@ scrollBtns.forEach((btn, index) => {
   btn.addEventListener("click", () => {
     let offset = 0;
     for (let i = 0; i <= index; i++) {
-      offset += BASE_SCROLL + panelData[i].hold;
+      offset += scrollAmounts[i] + panelData[i].hold;
     }
 
     window.scrollTo({
-      top: offset + vh * 0.6,
+      top: offset + vh * 0.5,
       behavior: "smooth"
     });
   });
@@ -49,12 +55,13 @@ function updatePanels() {
 
   panels.forEach((panel, index) => {
     const { hold } = panelData[index];
+    const sectionScroll = scrollAmounts[index];
 
     const start = accumulated;
-    const end = start + BASE_SCROLL + hold;
+    const end = start + sectionScroll + hold;
 
     const localScroll = scrollY - start;
-    const maxScroll = BASE_SCROLL + hold;
+    const maxScroll = sectionScroll + hold;
 
     const clamped = Math.min(Math.max(localScroll, 0), maxScroll);
     const progress = clamped / maxScroll;
@@ -82,7 +89,7 @@ function updatePanels() {
 
       // --- CONTENT-AWARE FADE OUT ---
       const fadeDelay = hold / maxScroll;
-      const fadeStart = 0.6 + fadeDelay * 0.4;
+      const fadeStart = 0.8 + fadeDelay * 0.4;
 
       if (progress > fadeStart) {
         const p = (progress - fadeStart) / (1 - fadeStart);
@@ -102,3 +109,4 @@ function updatePanels() {
 
 window.addEventListener("scroll", updatePanels);
 updatePanels();
+
