@@ -42,7 +42,7 @@ scrollBtns.forEach((btn, index) => {
     }
 
     window.scrollTo({
-      top: offset + vh * 0.5,
+      top: offset + vh * 4,
       behavior: "smooth"
     });
   });
