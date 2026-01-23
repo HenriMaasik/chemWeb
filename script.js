@@ -16,11 +16,16 @@ const searchContent = [
   { title: "Miks on keemia keskkonna kaitsel oluline?", section: "Section 1", keywords: ["keskkonnaprobleemid", "pollution", "climate change", "waste", "depletion"] },
   { title: "Keskkonnaprobleemid", section: "Section 1", keywords: ["industrial emissions", "greenhouse gases", "landfills", "oceans", "natural materials"] },
   { title: "Chemistry's Role", section: "Section 1", keywords: ["detecting", "pollutants", "transforming", "eco-friendly", "sustainable"] },
-  { title: "Green Chemistry", section: "Section 2", keywords: ["green chemistry", "sustainable", "principles"] },
-  { title: "12 Principles of Green Chemistry", section: "Section 2", keywords: ["prevention", "atom economy", "hazardous", "solvents", "energy", "renewable"] },
-  { title: "Water Purification", section: "Section 3", keywords: ["water", "purification", "filtration", "chlorination"] },
-  { title: "Air Pollution Control", section: "Section 4", keywords: ["air", "pollution", "catalytic converters", "emissions"] },
-  { title: "Catalytic Converters", section: "Section 4", keywords: ["catalysts", "CO", "NOx", "exhaust"] },
+  { title: "Roheline Keemia", section: "Section 2", keywords: ["roheline keemia", "sustainable", "principles", "katalüsaatorid"] },
+  { title: "Rohelise Keemia Põhimõtted", section: "Section 2", keywords: ["prevention", "atom economy", "hazardous", "solvents", "energy", "renewable"] },
+  { title: "Vee Puhastamine ja Joogivee Tagamine Keemia Abil", section: "Section 3", keywords: ["vee puhastamine", "water", "purification", "filtration", "chlorination", "alumiiniumsulfaat", "kloor"] },
+  { title: "Õhusaaste Vähendamine Keemia Abil", section: "Section 4", keywords: ["õhusaaste", "air", "pollution", "catalytic converters", "emissions", "katalüsaator"] },
+  { title: "Biolagunevad ja Keskkonnasõbralikud Materjalid", section: "Section 5", keywords: ["biolagunev", "biodegradable", "materials", "polümeer", "PLA", "PHA"] },
+  { title: "Väetised ja Toidutootmine", section: "Section 6", keywords: ["väetised", "fertilizers", "haber-boschi", "lämmastik", "fosfor", "kaalium"] },
+  { title: "Energia Salvestamine Akudes", section: "Section 7", keywords: ["energia", "akud", "batteries", "liitiumioon", "elektriautod", "telefonid"] },
+  { title: "Reostunud Keskkonna Puhastamine", section: "Section 8", keywords: ["keskkonnaremediatsioon", "remediation", "saaste", "puhastus", "nafta", "raskmetallid"] },
+  { title: "Kliimamuutuste Pidurdamine", section: "Section 9", keywords: ["süsiniku sidumine", "carbon capture", "CO2", "kliimamuutus", "CaCO3"] },
+  { title: "Keemia Igapäevases Keskkonnakaitses", section: "Section 10", keywords: ["igapäevane", "daily", "keskkonnakaitse", "LED", "puhastusvahendid"] },
 ];
 
 // Responsive positioning: sections centered based on viewport height
@@ -136,7 +141,7 @@ function displaySearchResults(results) {
   if (!searchResults) return;
   
   if (results.length === 0) {
-    searchResults.innerHTML = '<div class="search-result-item"><span class="result-title">No results found</span></div>';
+    searchResults.innerHTML = '<div class="search-result-item"><span class="result-title">Tulemusi ei leitud  </span></div>';
   } else {
     searchResults.innerHTML = results.map(item => `
       <div class="search-result-item" data-section="${item.section}">
@@ -168,7 +173,13 @@ function getSectionIndex(sectionName) {
     "Section 1": 1,
     "Section 2": 2,
     "Section 3": 3,
-    "Section 4": 4
+    "Section 4": 4,
+    "Section 5": 5,
+    "Section 6": 6,
+    "Section 7": 7,
+    "Section 8": 8,
+    "Section 9": 9,
+    "Section 10": 10
   };
   return mapping[sectionName] ?? 0;
 }
@@ -252,7 +263,7 @@ function updatePanels() {
         opacity = 1;
         scale = 1.25;
       }
-
+0
       // CONTENT-AWARE FADE OUT
       const fadeDelay = hold / maxScroll;
       const fadeStart = 0.9 + fadeDelay * 0.4;
