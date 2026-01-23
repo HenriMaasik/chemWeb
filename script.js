@@ -12,20 +12,20 @@ const SECTIONS_SCROLL_MULTIPLIER = 2; // Extra scroll time for non-landing secti
 
 // Search content data
 const searchContent = [
-  { title: "Kuidas aitab keemia kaitsta keskkonda?", section: "Landing", keywords: ["keemia", "keskkond", "chemistry", "environment"] },
-  { title: "Miks on keemia keskkonna kaitsel oluline?", section: "Section 1", keywords: ["keskkonnaprobleemid", "pollution", "climate change", "waste", "depletion"] },
-  { title: "Keskkonnaprobleemid", section: "Section 1", keywords: ["industrial emissions", "greenhouse gases", "landfills", "oceans", "natural materials"] },
-  { title: "Chemistry's Role", section: "Section 1", keywords: ["detecting", "pollutants", "transforming", "eco-friendly", "sustainable"] },
-  { title: "Roheline Keemia", section: "Section 2", keywords: ["roheline keemia", "sustainable", "principles", "katalüsaatorid"] },
-  { title: "Rohelise Keemia Põhimõtted", section: "Section 2", keywords: ["prevention", "atom economy", "hazardous", "solvents", "energy", "renewable"] },
-  { title: "Vee Puhastamine ja Joogivee Tagamine Keemia Abil", section: "Section 3", keywords: ["vee puhastamine", "water", "purification", "filtration", "chlorination", "alumiiniumsulfaat", "kloor"] },
-  { title: "Õhusaaste Vähendamine Keemia Abil", section: "Section 4", keywords: ["õhusaaste", "air", "pollution", "catalytic converters", "emissions", "katalüsaator"] },
-  { title: "Biolagunevad ja Keskkonnasõbralikud Materjalid", section: "Section 5", keywords: ["biolagunev", "biodegradable", "materials", "polümeer", "PLA", "PHA"] },
-  { title: "Väetised ja Toidutootmine", section: "Section 6", keywords: ["väetised", "fertilizers", "haber-boschi", "lämmastik", "fosfor", "kaalium"] },
-  { title: "Energia Salvestamine Akudes", section: "Section 7", keywords: ["energia", "akud", "batteries", "liitiumioon", "elektriautod", "telefonid"] },
-  { title: "Reostunud Keskkonna Puhastamine", section: "Section 8", keywords: ["keskkonnaremediatsioon", "remediation", "saaste", "puhastus", "nafta", "raskmetallid"] },
-  { title: "Kliimamuutuste Pidurdamine", section: "Section 9", keywords: ["süsiniku sidumine", "carbon capture", "CO2", "kliimamuutus", "CaCO3"] },
-  { title: "Keemia Igapäevases Keskkonnakaitses", section: "Section 10", keywords: ["igapäevane", "daily", "keskkonnakaitse", "LED", "puhastusvahendid"] },
+  { title: "Kuidas aitab keemia kaitsta keskkonda?", section: "Sissejuhatus", keywords: ["keemia", "keskkond", "loodus", "kaitse"] },
+  { title: "Miks on keemia keskkonna kaitsel oluline?", section: "Sektsioon 1", keywords: ["keemia", "keskkond", "saaste", "mõju"] },
+  { title: "Keskkonnaprobleemid", section: "Sektsioon 1", keywords: ["keskkonnaprobleemid", "õhusaaste", "veereostus", "plastik", "kliimamuutused"] },
+  { title: "Keemia roll", section: "Sektsioon 1", keywords: ["keemia roll", "saasteained", "keskkonnasõbralik", "materjalid", "tuvastamine"] },
+  { title: "Roheline Keemia", section: "Sektsioon 2", keywords: ["roheline keemia", "jätkusuutlik", "keskkonnasõbralik", "keemiatööstus"] },
+  { title: "Rohelise Keemia Põhimõtted", section: "Sektsioon 2", keywords: ["põhimõtted", "katalüsaatorid", "energia", "väljund", "ohutus"] },
+  { title: "Vee puhastamine ja joogivee tagamine", section: "Sektsioon 3", keywords: ["vee puhastamine", "joogivesi", "koagulatsioon", "filtreerimine", "desinfitseerimine", "kloor"] },
+  { title: "Õhusaaste vähendamine keemia abil", section: "Sektsioon 4", keywords: ["õhusaaste", "katalüsaator", "heitgaasid", "absorptsioon", "SO2", "CO"] },
+  { title: "Biolagunevad ja keskkonnasõbralikud materjalid", section: "Sektsioon 5", keywords: ["biolagunev", "keskkonnasõbralik", "materjalid", "PLA", "PHA", "polümeer", "lagunemine"] },
+  { title: "Väetised ja toidutootmine", section: "Sektsioon 6", keywords: ["väetised", "toidutootmine", "lämmastik", "fosfor", "kaalium", "haber-boschi"] },
+  { title: "Energia salvestamine akudes", section: "Sektsioon 7", keywords: ["energia", "akud", "liitiumioon", "elektriautod", "energiasalvestus"] },
+  { title: "Reostunud keskkonna puhastamine", section: "Sektsioon 8", keywords: ["keskkonna puhastamine", "remediatsioon", "saaste", "naftareostus", "raskmetallid"] },
+  { title: "Kliimamuutuste pidurdamine", section: "Sektsioon 9", keywords: ["kliimamuutused", "süsiniku sidumine", "CO2", "kasvuhoonegaas", "CaCO3"] },
+  { title: "Keemia igapäevases keskkonnakaitses", section: "Sektsioon 10", keywords: ["igapäevane", "keskkonnakaitse", "LED", "pesuvahendid", "taaskasutus"] },
 ];
 
 // Responsive positioning: sections centered based on viewport height
@@ -169,17 +169,17 @@ function displaySearchResults(results) {
 
 function getSectionIndex(sectionName) {
   const mapping = {
-    "Landing": 0,
-    "Section 1": 1,
-    "Section 2": 2,
-    "Section 3": 3,
-    "Section 4": 4,
-    "Section 5": 5,
-    "Section 6": 6,
-    "Section 7": 7,
-    "Section 8": 8,
-    "Section 9": 9,
-    "Section 10": 10
+    "Sissejuhatus": 0,
+    "Sektsioon 1": 1,
+    "Sektsioon 2": 2,
+    "Sektsioon 3": 3,
+    "Sektsioon 4": 4,
+    "Sektsioon 5": 5,
+    "Sektsioon 6": 6,
+    "Sektsioon 7": 7,
+    "Sektsioon 8": 8,
+    "Sektsioon 9": 9,
+    "Sektsioon 10": 10
   };
   return mapping[sectionName] ?? 0;
 }
